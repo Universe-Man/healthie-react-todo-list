@@ -1,6 +1,4 @@
 import { useState } from "react"
-// import reactLogo from "./assets/react.svg"
-// import viteLogo from "/vite.svg"
 import "./App.css";
 import AddItemForm from "./components/AddItemForm";
 import ToDoList from "./components/ToDoList";
@@ -30,7 +28,7 @@ function App() {
         <AddItemForm addNewItem={addNewItem} />
       </div>
       <div className="lists-container">
-        <ToDoList toDoItems={toDoItems} />
+        <ToDoList toDoItems={toDoItems} setToDoItems={setToDoItems} />
         <DoingList />
         <DoneList />
       </div>
