@@ -1,4 +1,7 @@
-import { useState, useCallback } from "react"
+import { useState, useCallback } from "react";
+import { useWindowSize } from "react-use";
+import Confetti from "react-confetti";
+import type { ListItemType } from "./types";
 import "./App.css";
 import AddItemForm from "./components/AddItemForm";
 import ToDoList from "./components/ToDoList";
@@ -6,6 +9,8 @@ import DoingList from "./components/DoingList";
 import DoneList from "./components/DoneList";
 
 function App() {
+  const { width, height } = useWindowSize();
+  const [confettiPieces, setConfettiPieces] = useState<number>(0);
   const [itemId, setItemId] = useState<number>(5); // because we are pre-loading 4 items, but this would normally be 1
   const [toDoItems, setToDoItems] = useState<ListItemType[]>([
     { id: 1, content: "Turn On Computer", done: false, list: "toDo" },
@@ -35,7 +40,7 @@ function App() {
 
   const addNewItem = (itemContent) => {
     // console.log("adding new item")
-    const newToDoItems = [...toDoItems, { id: itemId, content: itemContent, done: false }]
+    const newToDoItems: ListItemType[] = [...toDoItems, { id: itemId, content: itemContent, done: false, list: "toDo" }]
     setToDoItems(newToDoItems);
     setItemId(itemId + 1);
     console.log(toDoItems, itemId)
@@ -140,10 +145,18 @@ function App() {
     console.log(index)
     console.log(list)
     console.log("-----")
+    setConfettiPieces(300);
+    setTimeout(() => setConfettiPieces(0), 6000);
   };
 
   return (
     <div className="container">
+      <Confetti
+        style={{ top: "-50px" }}
+        width={width}
+        height={height}
+        numberOfPieces={confettiPieces}
+      />
       <h1>Healthie Assessment To-Do List:</h1>
       <div className="new-item-form-container">
         <AddItemForm addNewItem={addNewItem} />
