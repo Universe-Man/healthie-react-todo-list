@@ -1,5 +1,14 @@
-.todo-list-container {
-  background-color: aqua;
+.list-item {
+  /* background-color: rgba(0, 0, 0, 0.5); */
   height: 100%;
   width: 100%;
+  padding: 7.5px 0px;
+}
+
+.odd {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.even {
+  background-color: rgba(0, 0, 0, 0.3);
 }

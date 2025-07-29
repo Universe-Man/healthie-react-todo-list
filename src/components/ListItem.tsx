@@ -1,4 +1,5 @@
 import type { ListItemType } from "../types";
+import "../styles/ListItem.css";
 
 interface ListItemProps {
   item: ListItemType;
@@ -6,9 +7,10 @@ interface ListItemProps {
 };
 
 const ListItem: React.FC<ListItemProps> = ({ item, index }) => {
+  const odd = (index + 1) % 2 !== 0 ? "odd" : "even";
 
   return (
-    <div>
+    <div className={`list-item list-item-${item.id} ${odd}`}>
       {item.content}
     </div>
   );
