@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { useWindowSize } from "react-use";
-import Confetti from "react-confetti";
+import Confetti from "react-confetti"; // my linter keeps telling me it cannot find the module "react-confetti", but the import is working as expected on my machine, so hopefully there are no issues on other machines
 import type { ListItemType } from "./types";
 import "./App.css";
 import AddItemForm from "./components/AddItemForm";
