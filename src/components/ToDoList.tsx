@@ -19,31 +19,31 @@ const ToDoList: React.FC<ToDoListProps> = ({ toDoItems, setToDoItems }) => {
   // ])
   const ref = useRef<HTMLDivElement>(null);
 
-  const moveItem = useCallback(
-    (dragIndex: number, hoverIndex: number) => {
-      const draggedItem = toDoItems[dragIndex];
-      const newItems = [...toDoItems];
-      newItems.splice(dragIndex, 1);
-      newItems.splice(hoverIndex, 0, draggedItem);
-      // console.log("HEELOO")
-      setToDoItems(newItems);
-    },
-    [toDoItems],
-  );
+  // const moveItem = useCallback(
+  //   (dragIndex: number, hoverIndex: number) => {
+  //     const draggedItem = toDoItems[dragIndex];
+  //     const newItems = [...toDoItems];
+  //     newItems.splice(dragIndex, 1);
+  //     newItems.splice(hoverIndex, 0, draggedItem);
+  //     // console.log("HEELOO")
+  //     setToDoItems(newItems);
+  //   },
+  //   [toDoItems],
+  // );
 
-  const renderListItem = useCallback(
-    (item: ListItemType, index: number) => {
-      return (
-        <ListItem
-          key={item.id}
-          item={item}
-          index={index}
-          moveItem={moveItem}
-        />
-      );
-    },
-    [moveItem]
-  );
+  // const renderListItem = useCallback(
+  //   (item: ListItemType, index: number) => {
+  //     return (
+  //       <ListItem
+  //         key={item.id}
+  //         listItem={item}
+  //         index={index}
+  //         moveItem={moveItem}
+  //       />
+  //     );
+  //   },
+  //   [moveItem]
+  // );
 
   // const [, drop] = useDrop(() => ({
   //   accept: "item",
@@ -70,10 +70,10 @@ const ToDoList: React.FC<ToDoListProps> = ({ toDoItems, setToDoItems }) => {
     <div className="todo-list-container">
       <h2>To Do List:</h2>
       {/* {console.log(toDoItems)} */}
-      {toDoItems.map((item, index) => renderListItem(item, index))}
-      {/* {toDoItems.map((toDoItem, index) => (
-        <ListItem key={toDoItem.id} item={toDoItem} index={index} moveItem={moveItem} />
-      ))} */}
+      {/* {toDoItems.map((item, index) => renderListItem(item, index))} */}
+      {toDoItems.map((toDoItem, index) => (
+        <ListItem key={toDoItem.id} toDoItem={toDoItem} index={index} moveItem={moveItem} />
+      ))}
     </div>
   );
 

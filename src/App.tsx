@@ -14,6 +14,18 @@ function App() {
     { id: 4, content: "Submit Healthie Take Home Assessment", done: false },
   ]);
 
+  const moveItem = useCallback(
+    (dragIndex: number, hoverIndex: number) => {
+      const draggedItem = toDoItems[dragIndex];
+      const newItems = [...toDoItems];
+      newItems.splice(dragIndex, 1);
+      newItems.splice(hoverIndex, 0, draggedItem);
+      // console.log("HEELOO")
+      setToDoItems(newItems);
+    },
+    [toDoItems],
+  );
+
   const addNewItem = (itemContent) => {
     setToDoItems([...toDoItems, {
       id: itemId, content: itemContent, done: false
