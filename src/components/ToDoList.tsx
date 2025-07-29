@@ -97,7 +97,7 @@ const ToDoList: React.FC<ToDoListProps> = ({ toDoItems, setToDoItems, moveItem, 
       {/* {console.log(toDoItems)} */}
       {/* {toDoItems.map((item, index) => renderListItem(item, index))} */}
       {toDoItems.map((toDoItem, index) => (
-        <ListItem key={toDoItem.id} listItem={toDoItem} index={index} moveItem={moveItem} />
+        <ListItem key={`toDo-${toDoItem.id}-${index}`} listItem={toDoItem} index={index} moveItem={moveItem} />
       ))}
     </div>
   );

@@ -12,7 +12,7 @@ interface ListItemProps {
 const ListItem: React.FC<ListItemProps> = ({ listItem, index, moveItem }) => {
   // const ref = useRef<HTMLDivElement>(null);
   const odd = (index + 1) % 2 !== 0 ? "odd" : "even";
-  // console.log("LOOKK!!!", item)
+  // console.log("LOOKK!!!", listItem, index)
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "item",
     item: { id: listItem.id, index, list: listItem.list },
@@ -34,10 +34,10 @@ const ListItem: React.FC<ListItemProps> = ({ listItem, index, moveItem }) => {
       if (dragIndex === dropIndex) {
         return;
       };
-      console.log(dragIndex)
-      console.log(dropIndex)
-      console.log("-----")
-
+      // console.log(dragIndex)
+      // console.log(dropIndex)
+      // console.log("-----")
+      // console.log("moving item")
       moveItem(dragIndex, dropIndex);
       item.index = dropIndex;
     }

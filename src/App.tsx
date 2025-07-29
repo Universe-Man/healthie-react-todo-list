@@ -13,13 +13,16 @@ function App() {
     { id: 3, content: "Buy Groceries", done: false, list: "toDo" },
     { id: 4, content: "Submit Healthie Take Home Assessment", done: false, list: "toDo" },
   ]);
-  const [doingItems, setDoingItems] = useState<ListItemType[]>([{ id: 1, content: "doing", done: false, list: "toDo" },
+  const [doingItems, setDoingItems] = useState<ListItemType[]>([
+    { id: 1, content: "doing", done: false, list: "doing" },
+    { id: 2, content: "more doing", done: false, list: "doing" },
   ]);
-  const [doneItems, setDoneItems] = useState<ListItemType[]>([{ id: 1, content: "done", done: false, list: "toDo" },
+  const [doneItems, setDoneItems] = useState<ListItemType[]>([{ id: 1, content: "done", done: false, list: "done" },
   ]);
 
   const moveItem = useCallback(
     (dragIndex: number, dropIndex: number) => {
+      console.log("I'm running")
       const draggedItem = toDoItems[dragIndex];
       const newItems = [...toDoItems];
       newItems.splice(dragIndex, 1);
@@ -31,29 +34,34 @@ function App() {
   );
 
   const addNewItem = (itemContent) => {
-    setToDoItems([...toDoItems, {
-      id: itemId, content: itemContent, done: false
-    }]);
+    // console.log("adding new item")
+    const newToDoItems = [...toDoItems, { id: itemId, content: itemContent, done: false }]
+    setToDoItems(newToDoItems);
     setItemId(itemId + 1);
-    console.log(toDoItems)
+    console.log(toDoItems, itemId)
   };
 
   const addToToDoList = (index, list) => {
     console.log("To Do List")
     let oldList = [];
+    let oldListSetter;
     if (list === "toDo") {
       return;
     } else if (list === "doing") {
       oldList = doingItems;
+      oldListSetter = setDoingItems;
     } else if (list === "done") {
       oldList = doneItems;
+      oldListSetter = setDoneItems;
     };
     // remove from other list and add to do list
     const newItem = oldList[index];
+    newItem.list = "toDo";
     const oldItems = [...oldList];
     const newItems = [...toDoItems];
     oldItems.splice(index, 1);
     newItems.push(newItem);
+    oldListSetter(oldItems);
     setToDoItems(newItems);
     // console.log(newList, "sdfsdsd")
     // console.log(list)
@@ -62,21 +70,33 @@ function App() {
   };
 
   const addToDoingList = (index, list) => {
-    console.log("Doing List")
+    console.log("Doing List", toDoItems, itemId)
     let oldList = [];
+    let oldListSetter;
     if (list === "doing") {
       return;
     } else if (list === "toDo") {
       oldList = toDoItems;
+      oldListSetter = setToDoItems;
     } else if (list === "done") {
       oldList = doneItems;
+      oldListSetter = setDoneItems;
     };
+    // console.log("asdfasdfasdf", doingItems)
     // remove from other list and add to do list
+    console.log("oldList", oldList)
+    console.log("index", index)
+
     const newItem = oldList[index];
+    newItem.list = "doing";
     const oldItems = [...oldList];
     const newItems = [...doingItems];
     oldItems.splice(index, 1);
     newItems.push(newItem);
+    console.log("newItem:", newItem)
+    console.log("oldItems:", oldItems)
+    console.log("newItems:", newItems)
+    oldListSetter(oldItems);
     setDoingItems(newItems);
     // console.log(newList, "sdfsdsd")
     // console.log(list)
@@ -84,28 +104,33 @@ function App() {
 
 
     // remove from other list and add doing list
-    console.log(index)
-    console.log(list)
-    console.log("-----")
+    // console.log(index)
+    // console.log(list)
+    // console.log("-----")
   };
 
   const addToDoneList = (index, list) => {
     console.log("Done List")
     let oldList = [];
+    let oldListSetter;
     if (list === "done") {
       return;
     } else if (list === "toDo") {
       oldList = toDoItems;
+      oldListSetter = setToDoItems;
     } else if (list === "doing") {
       oldList = doingItems;
+      oldListSetter = setDoneItems;
     };
     // remove from other list and add to do list
     const newItem = oldList[index];
+    newItem.list = "done";
     const oldItems = [...oldList];
     const newItems = [...toDoItems];
     oldItems.splice(index, 1);
     newItems.push(newItem);
-    setToDoItems(newItems);
+    oldListSetter(oldItems);
+    setDoneItems(newItems);
     // console.log(newList, "sdfsdsd")
     // console.log(list)
     // console.log("-----")

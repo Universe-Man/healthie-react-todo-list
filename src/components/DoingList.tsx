@@ -35,7 +35,11 @@ const DoingList: React.FC<DoingListProps> = ({ doingItems, setDoingItems, moveIt
       // };
       // console.log(dragIndex)
       // console.log(dropIndex)
-      // console.log("-----")
+      // console.log("-----IMPORTANT-----")
+      // console.log(item)
+      // console.log()
+      // console.log()
+
 
       // moveItem(dragIndex, dropIndex);
       addToDoingList(item.index, item.list);
@@ -47,7 +51,7 @@ const DoingList: React.FC<DoingListProps> = ({ doingItems, setDoingItems, moveIt
     <div className="doing-list-container" ref={(element) => { drop(element) }}>
       <h2>Doing List:</h2>
       {doingItems.map((doingItem, index) => (
-        <ListItem key={doingItem.id} listItem={doingItem} index={index} moveItem={moveItem} />
+        <ListItem key={`doing-${doingItem.id}-${index}`} listItem={doingItem} index={index} moveItem={moveItem} />
       ))}
     </div>
   );
