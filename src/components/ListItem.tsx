@@ -4,18 +4,18 @@ import type { ListItemType } from "../types";
 import "../styles/ListItem.css";
 
 interface ListItemProps {
-  toDoItem: ListItemType;
+  listItem: ListItemType;
   index: number;
   moveItem: (currentIndex: number, newIndex: number) => void;
 };
 
-const ListItem: React.FC<ListItemProps> = ({ toDoItem, index, moveItem }) => {
+const ListItem: React.FC<ListItemProps> = ({ listItem, index, moveItem }) => {
   // const ref = useRef<HTMLDivElement>(null);
   const odd = (index + 1) % 2 !== 0 ? "odd" : "even";
   // console.log("LOOKK!!!", item)
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "item",
-    item: { id: toDoItem.id, index },
+    item: { id: listItem.id, index, list: listItem.list },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
@@ -25,7 +25,7 @@ const ListItem: React.FC<ListItemProps> = ({ toDoItem, index, moveItem }) => {
     accept: "item",
     drop: (item: { id: number, index: number }) => {
       // console.log("dropped item:", item);
-      // console.log(toDoItem)
+      // console.log(listItem)
       // console.log(index)
 
 
@@ -34,11 +34,14 @@ const ListItem: React.FC<ListItemProps> = ({ toDoItem, index, moveItem }) => {
       if (dragIndex === dropIndex) {
         return;
       };
+      console.log(dragIndex)
+      console.log(dropIndex)
+      console.log("-----")
 
       moveItem(dragIndex, dropIndex);
       item.index = dropIndex;
     }
-  }))
+  }));
 
 
 
@@ -64,7 +67,7 @@ const ListItem: React.FC<ListItemProps> = ({ toDoItem, index, moveItem }) => {
 
   // const [, drop] = useDrop(() => ({
   //   accept: "item",
-  //   hover(draggedItem: toDoItemType, monitor) {
+  //   hover(draggedItem: listItemType, monitor) {
   //     if (!ref.current) {
   //       return;
   //     };
@@ -83,8 +86,8 @@ const ListItem: React.FC<ListItemProps> = ({ toDoItem, index, moveItem }) => {
   // );
 
   return (
-    <div className={`list-item list-item-${toDoItem.id} ${odd}`} ref={(element) => { drag(drop(element)) }}>
-      {toDoItem.content}
+    <div className={`list-item list-item-${listItem.id} ${odd}`} ref={(element) => { drag(drop(element)) }}>
+      {listItem.content}
     </div>
   );
 };

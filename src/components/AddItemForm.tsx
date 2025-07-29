@@ -23,6 +23,9 @@ const AddItemForm: React.FC<AddItemProps> = ({ addNewItem }) => {
   };
 
   const handleAddNewItem = () => {
+    if (newItemContent === "") {
+      return;
+    };
     addNewItem(newItemContent);
     closeAndClearAddItemForm();
   };
