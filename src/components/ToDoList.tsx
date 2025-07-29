@@ -19,7 +19,7 @@ const ToDoList: React.FC<ToDoListProps> = ({ toDoItems }) => {
     <div className="todo-list-container">
       <h2>To Do List:</h2>
       {toDoItems.map((toDoItem, index) => (
-        <ListItem item={toDoItem} index={index} />
+        <ListItem key={toDoItem.id} item={toDoItem} index={index} />
       ))}
     </div>
   );

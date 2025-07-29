@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "../styles/AddItemForm.css";
 
 interface AddItemProps {
   addNewItem: (newItemContent) => void;
@@ -7,7 +8,6 @@ interface AddItemProps {
 const AddItemForm: React.FC<AddItemProps> = ({ addNewItem }) => {
   const [formOpen, setFormOpen] = useState<boolean>(false);
   const [newItemContent, setNewItemContent] = useState<string>("");
-
 
   const openAddItemForm = () => {
     setFormOpen(true);
@@ -27,25 +27,25 @@ const AddItemForm: React.FC<AddItemProps> = ({ addNewItem }) => {
     closeAndClearAddItemForm();
   };
 
-
   return (
     <>
       {formOpen ? (
         <div>
-          <form>
+          <form onSubmit={handleAddNewItem}>
             <input
               type="text"
               id="new-item"
               name="new-item"
               value={newItemContent}
               onChange={handleNewItemChange}
+              autoFocus
             />
           </form>
-          <button onClick={handleAddNewItem}>Add Item</button>
-          <button onClick={closeAndClearAddItemForm}>Cancel</button>
+          <button className="add-and-cancel-buttons" onClick={handleAddNewItem}>Add Item</button>
+          <button className="add-and-cancel-buttons" onClick={closeAndClearAddItemForm}>Cancel</button>
         </div>
       ) : (
-          <button onClick={openAddItemForm}>Add New To-Do Item</button>
+          <button className="add-new-item-button" onClick={openAddItemForm}>Add New To-Do Item</button>
         )}
     </>
   );

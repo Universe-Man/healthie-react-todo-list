@@ -26,7 +26,9 @@ function App() {
   return (
     <div className="container">
       <h1>Healthie Assessment To-Do List:</h1>
-      <AddItemForm addNewItem={addNewItem} />
+      <div className="new-item-form-container">
+        <AddItemForm addNewItem={addNewItem} />
+      </div>
       <div className="lists-container">
         <ToDoList toDoItems={toDoItems} />
         <DoingList />
