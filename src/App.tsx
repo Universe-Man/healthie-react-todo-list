@@ -23,7 +23,7 @@ function App() {
     { id: 6, content: "more doing", done: false, list: "doing" },
   ]);
   const [doneItems, setDoneItems] = useState<ListItemType[]>([
-    { id: 7, content: "done", done: false, list: "done" },
+    { id: 7, content: "done", done: true, list: "done" },
   ]);
 
   const moveItem = useCallback((dragIndex: number, dropIndex: number, list: string) => {
@@ -88,6 +88,7 @@ function App() {
     };
     const newItem = oldList[index];
     newItem.list = "toDo";
+    newItem.done = false;
     const oldItems = [...oldList];
     const newItems = [...toDoItems];
     oldItems.splice(index, 1);
@@ -110,6 +111,7 @@ function App() {
     };
     const newItem = oldList[index];
     newItem.list = "doing";
+    newItem.done = false;
     const oldItems = [...oldList];
     const newItems = [...doingItems];
     oldItems.splice(index, 1);
@@ -132,6 +134,7 @@ function App() {
     };
     const newItem = oldList[index];
     newItem.list = "done";
+    newItem.done = true;
     const oldItems = [...oldList];
     const newItems = [...doneItems];
     oldItems.splice(index, 1);

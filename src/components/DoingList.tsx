@@ -21,7 +21,7 @@ const DoingList: React.FC<DoingListProps> = ({ doingItems, setDoingItems, moveIt
 
   return (
     <div className="doing-list-container" ref={(element) => { drop(element) }}>
-      <h2>Doing List:</h2>
+      <h2>Doing:</h2>
       {doingItems.map((doingItem, index) => (
         <ListItem key={`${doingItem.id}`} listItem={doingItem} index={index} moveItem={moveItem} dropTargetList="doing" />
       ))}
