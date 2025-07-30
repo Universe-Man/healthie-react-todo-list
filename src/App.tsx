@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useWindowSize } from "react-use";
 import Confetti from "react-confetti"; // my linter keeps telling me it cannot find the module "react-confetti", but the import is working as expected on my machine, so hopefully there are no issues on other machines
 import type { ListItemType } from "./types";
@@ -11,7 +11,7 @@ import DoneList from "./components/DoneList";
 function App() {
   const { width, height } = useWindowSize();
   const [confettiPieces, setConfettiPieces] = useState<number>(0);
-  const [itemId, setItemId] = useState<number>(5); // because we are pre-loading 4 items, but this would normally be 1
+  const [itemId, setItemId] = useState<number>(8); // because we are pre-loading 7 items, but this would normally be 1
   const [toDoItems, setToDoItems] = useState<ListItemType[]>([
     { id: 1, content: "Turn On Computer", done: false, list: "toDo" },
     { id: 2, content: "Build React To Do List", done: false, list: "toDo" },
@@ -19,47 +19,73 @@ function App() {
     { id: 4, content: "Submit Healthie Take Home Assessment", done: false, list: "toDo" },
   ]);
   const [doingItems, setDoingItems] = useState<ListItemType[]>([
-    { id: 1, content: "doing", done: false, list: "doing" },
-    { id: 2, content: "more doing", done: false, list: "doing" },
+    { id: 5, content: "doing", done: false, list: "doing" },
+    { id: 6, content: "more doing", done: false, list: "doing" },
   ]);
-  const [doneItems, setDoneItems] = useState<ListItemType[]>([{ id: 1, content: "done", done: false, list: "done" },
+  const [doneItems, setDoneItems] = useState<ListItemType[]>([
+    { id: 7, content: "done", done: false, list: "done" },
   ]);
 
-  const moveItem = useCallback(
-    (dragIndex: number, dropIndex: number) => {
-      console.log("I'm running")
-      const draggedItem = toDoItems[dragIndex];
-      const newItems = [...toDoItems];
-      newItems.splice(dragIndex, 1);
-      newItems.splice(dropIndex, 0, draggedItem);
-      // console.log("HEELOO")
-      setToDoItems(newItems);
-    },
-    [toDoItems],
+  const moveItem = useCallback((dragIndex: number, dropIndex: number, list: string) => {
+    let currentList = [];
+    let currentListSetter;
+    if (list === "toDo") {
+      currentList = [...toDoItems];
+      currentListSetter = setToDoItems;
+    } else if (list === "doing") {
+      currentList = [...doingItems];
+      currentListSetter = setDoingItems;
+    } else if (list === "done") {
+      currentList = [...doneItems];
+      currentListSetter = setDoneItems;
+    };
+    const draggedItem = currentList[dragIndex];
+    const newItems = [...currentList];
+    newItems.splice(dragIndex, 1);
+    newItems.splice(dropIndex, 0, draggedItem);
+    currentListSetter(newItems);
+  },
+    [toDoItems, doingItems, doneItems],
   );
 
+  // NOTE: left this version on moveItem in commented since I went back and forth between using useCallback and not.
+  // const moveItem = (dragIndex: number, dropIndex: number, list: string) => {
+  //   let currentList = [];
+  //   let currentListSetter;
+  //   if (list === "toDo") {
+  //     currentList = [...toDoItems];
+  //     currentListSetter = setToDoItems;
+  //   } else if (list === "doing") {
+  //     currentList = [...doingItems];
+  //     currentListSetter = setDoingItems;
+  //   } else if (list === "done") {
+  //     currentList = [...doneItems];
+  //     currentListSetter = setDoneItems;
+  //   };
+  //   const draggedItem = currentList[dragIndex];
+  //   const newItems = [...currentList];
+  //   newItems.splice(dragIndex, 1);
+  //   newItems.splice(dropIndex, 0, draggedItem);
+  //   currentListSetter(newItems);
+  // };
+
   const addNewItem = (itemContent) => {
-    // console.log("adding new item")
-    const newToDoItems: ListItemType[] = [...toDoItems, { id: itemId, content: itemContent, done: false, list: "toDo" }]
-    setToDoItems(newToDoItems);
-    setItemId(itemId + 1);
-    console.log(toDoItems, itemId)
+    setToDoItems(toDoItems => [...toDoItems, { id: itemId, content: itemContent, done: false, list: "toDo" }]);
+    setItemId(prevId => prevId + 1);
   };
 
   const addToToDoList = (index, list) => {
-    console.log("To Do List")
     let oldList = [];
     let oldListSetter;
     if (list === "toDo") {
       return;
     } else if (list === "doing") {
-      oldList = doingItems;
+      oldList = [...doingItems];
       oldListSetter = setDoingItems;
     } else if (list === "done") {
-      oldList = doneItems;
+      oldList = [...doneItems];
       oldListSetter = setDoneItems;
     };
-    // remove from other list and add to do list
     const newItem = oldList[index];
     newItem.list = "toDo";
     const oldItems = [...oldList];
@@ -68,83 +94,50 @@ function App() {
     newItems.push(newItem);
     oldListSetter(oldItems);
     setToDoItems(newItems);
-    // console.log(newList, "sdfsdsd")
-    // console.log(list)
-    // console.log("-----")
-
   };
 
   const addToDoingList = (index, list) => {
-    console.log("Doing List", toDoItems, itemId)
     let oldList = [];
     let oldListSetter;
     if (list === "doing") {
       return;
     } else if (list === "toDo") {
-      oldList = toDoItems;
+      oldList = [...toDoItems];
       oldListSetter = setToDoItems;
     } else if (list === "done") {
-      oldList = doneItems;
+      oldList = [...doneItems];
       oldListSetter = setDoneItems;
     };
-    // console.log("asdfasdfasdf", doingItems)
-    // remove from other list and add to do list
-    console.log("oldList", oldList)
-    console.log("index", index)
-
     const newItem = oldList[index];
     newItem.list = "doing";
     const oldItems = [...oldList];
     const newItems = [...doingItems];
     oldItems.splice(index, 1);
     newItems.push(newItem);
-    console.log("newItem:", newItem)
-    console.log("oldItems:", oldItems)
-    console.log("newItems:", newItems)
     oldListSetter(oldItems);
     setDoingItems(newItems);
-    // console.log(newList, "sdfsdsd")
-    // console.log(list)
-    // console.log("-----")
-
-
-    // remove from other list and add doing list
-    // console.log(index)
-    // console.log(list)
-    // console.log("-----")
   };
 
   const addToDoneList = (index, list) => {
-    console.log("Done List")
     let oldList = [];
     let oldListSetter;
     if (list === "done") {
       return;
     } else if (list === "toDo") {
-      oldList = toDoItems;
+      oldList = [...toDoItems];
       oldListSetter = setToDoItems;
     } else if (list === "doing") {
-      oldList = doingItems;
+      oldList = [...doingItems];
       oldListSetter = setDoneItems;
     };
-    // remove from other list and add to do list
     const newItem = oldList[index];
     newItem.list = "done";
     const oldItems = [...oldList];
-    const newItems = [...toDoItems];
+    const newItems = [...doneItems];
     oldItems.splice(index, 1);
     newItems.push(newItem);
     oldListSetter(oldItems);
     setDoneItems(newItems);
-    // console.log(newList, "sdfsdsd")
-    // console.log(list)
-    // console.log("-----")
-
-
-    // remove from other list and add done list
-    console.log(index)
-    console.log(list)
-    console.log("-----")
     setConfettiPieces(300);
     setTimeout(() => setConfettiPieces(0), 6000);
   };

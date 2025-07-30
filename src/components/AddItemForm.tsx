@@ -3,7 +3,7 @@ import "../styles/AddItemForm.css";
 
 interface AddItemProps {
   addNewItem: (newItemContent) => void;
-}
+};
 
 const AddItemForm: React.FC<AddItemProps> = ({ addNewItem }) => {
   const [formOpen, setFormOpen] = useState<boolean>(false);

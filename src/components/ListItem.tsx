@@ -1,4 +1,3 @@
-// import { useRef } from "react";
 import { useDrag, useDrop } from "react-dnd";
 import type { ListItemType } from "../types";
 import "../styles/ListItem.css";
@@ -6,84 +5,32 @@ import "../styles/ListItem.css";
 interface ListItemProps {
   listItem: ListItemType;
   index: number;
-  moveItem: (currentIndex: number, newIndex: number) => void;
+  moveItem: (currentIndex: number, newIndex: number, list: string) => void;
+  dropTargetList: string;
 };
 
-const ListItem: React.FC<ListItemProps> = ({ listItem, index, moveItem }) => {
-  // const ref = useRef<HTMLDivElement>(null);
+const ListItem: React.FC<ListItemProps> = ({ listItem, index, moveItem, dropTargetList }) => {
   const odd = (index + 1) % 2 !== 0 ? "odd" : "even";
-  // console.log("LOOKK!!!", listItem, index)
-  const [{ isDragging }, drag] = useDrag(() => ({
+  const [, drag] = useDrag(() => ({
     type: "item",
     item: { id: listItem.id, index, list: listItem.list },
-    collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
-    }),
   }));
 
   const [, drop] = useDrop(() => ({
     accept: "item",
-    drop: (item: { id: number, index: number }) => {
-      // console.log("dropped item:", item);
-      // console.log(listItem)
-      // console.log(index)
-
-
+    drop: (item: { id: number, index: number, list: string }) => {
+      if (item.list !== dropTargetList) {
+        return;
+      };
       const dragIndex = item.index;
       const dropIndex = index;
       if (dragIndex === dropIndex) {
         return;
       };
-      // console.log(dragIndex)
-      // console.log(dropIndex)
-      // console.log("-----")
-      // console.log("moving item")
-      moveItem(dragIndex, dropIndex);
-      item.index = dropIndex;
-    }
+      // NOTE: commented out moveItem below before adding new items to the toDoList via addNewItem allows them to persist when uncommented it after, but if moveItem isn't commented out when running addNewItem, the new item doesn't stay in state after moveItem runs. This was particulary confusing because this useDrop function and the moveItem function do not run when addNewItem runs.
+      moveItem(dragIndex, dropIndex, item.list);
+    },
   }));
-
-
-
-  // const [, drop] = useDrop(
-  //   () => ({
-  //     accept: ItemTypes.KNIGHT,
-  //     drop: () => moveKnight(x, y)
-  //   }),
-  //   [x, y]
-  // )
-
-
-  // const [{ isOver }, drop] = useDrop(
-  //   () => ({
-  //     accept: ItemTypes.KNIGHT,
-  //     drop: () => moveKnight(x, y),
-  //     collect: (monitor) => ({
-  //       isOver: !!monitor.isOver()
-  //     })
-  //   }),
-  //   [x, y]
-  // )
-
-  // const [, drop] = useDrop(() => ({
-  //   accept: "item",
-  //   hover(draggedItem: listItemType, monitor) {
-  //     if (!ref.current) {
-  //       return;
-  //     };
-  //     const dragIndex = draggedItem.index;
-  //     const hoverIndex = index;
-  //     console.log(dragIndex)
-  //     console.log(hoverIndex)
-  //     if (dragIndex === hoverIndex) {
-  //       return;
-  //     };
-  //     moveItem(dragIndex, hoverIndex);
-  //     item.index = hoverIndex;
-  //   },
-
-  // }),
-  // );
 
   return (
     <div className={`list-item list-item-${listItem.id} ${odd}`} ref={(element) => { drag(drop(element)) }}>
