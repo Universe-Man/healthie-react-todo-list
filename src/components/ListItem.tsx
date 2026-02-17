@@ -1,12 +1,12 @@
 import { useDrag, useDrop } from "react-dnd";
-import type { ListItemType } from "../types";
+import type { ListType, ListItemType } from "../types";
 import "../styles/ListItem.css";
 
 interface ListItemProps {
   listItem: ListItemType;
   index: number;
-  moveItem: (currentIndex: number, newIndex: number, list: string) => void;
-  dropTargetList: string;
+  moveItem: (currentIndex: number, newIndex: number, list: ListType) => void;
+  dropTargetList: ListType;
 };
 
 const ListItem: React.FC<ListItemProps> = ({ listItem, index, moveItem, dropTargetList }) => {
@@ -18,7 +18,7 @@ const ListItem: React.FC<ListItemProps> = ({ listItem, index, moveItem, dropTarg
 
   const [, drop] = useDrop(() => ({
     accept: "item",
-    drop: (item: { id: number, index: number, list: string }) => {
+    drop: (item: { id: number, index: number, list: ListType }) => {
       if (item.list !== dropTargetList) {
         return;
       };

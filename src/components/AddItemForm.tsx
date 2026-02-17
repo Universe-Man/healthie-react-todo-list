@@ -2,7 +2,7 @@ import { useState } from "react";
 import "../styles/AddItemForm.css";
 
 interface AddItemProps {
-  addNewItem: (newItemContent) => void;
+  addNewItem: (newItemContent: string) => void;
 };
 
 const AddItemForm: React.FC<AddItemProps> = ({ addNewItem }) => {

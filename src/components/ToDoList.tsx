@@ -1,21 +1,21 @@
 import { useState, useCallback } from "react";
 import { useRef } from "react";
 import { useDrop } from "react-dnd";
-import type { ListItemType } from "../types";
+import type { ListType, ListItemType } from "../types";
 import ListItem from "./ListItem";
 import "../styles/ToDoList.css";
 
 interface ToDoListProps {
   toDoItems: ListItemType[];
   setToDoItems: React.Dispatch<React.SetStateAction<ListItemType[]>>;
-  moveItem: (currentIndex: number, newIndex: number, list: string) => void;
-  addToToDoList: (index: number, list: string) => void;
+  moveItem: (currentIndex: number, newIndex: number, list: ListType) => void;
+  addToToDoList: (index: number, list: ListType) => void;
 };
 
 const ToDoList: React.FC<ToDoListProps> = ({ toDoItems, setToDoItems, moveItem, addToToDoList }) => {
   const [, drop] = useDrop(() => ({
     accept: "item",
-    drop: (item: { id: number, index: number, list: string }) => {
+    drop: (item: { id: number, index: number, list: ListType }) => {
       addToToDoList(item.index, item.list);
     },
   }));

@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { useWindowSize } from "react-use";
 import Confetti from "react-confetti"; // my linter keeps telling me it cannot find the module "react-confetti", but the import is working as expected on my machine, so hopefully there are no issues on other machines
-import type { ListItemType } from "./types";
+import type { ListType, ListItemType } from "./types";
 import "./App.css";
 import AddItemForm from "./components/AddItemForm";
 import ToDoList from "./components/ToDoList";
@@ -26,9 +26,10 @@ function App() {
     { id: 7, content: "done", done: true, list: "done" },
   ]);
 
-  const moveItem = useCallback((dragIndex: number, dropIndex: number, list: string) => {
-    let currentList = [];
-    let currentListSetter;
+  const moveItem = useCallback((dragIndex: number, dropIndex: number, list: ListType) => {
+    let currentList: ListItemType[] = [];
+    let currentListSetter: React.Dispatch<React.SetStateAction<ListItemType[]>>;
+    ;
     if (list === "toDo") {
       currentList = [...toDoItems];
       currentListSetter = setToDoItems;
@@ -49,7 +50,7 @@ function App() {
   );
 
   // NOTE: left this version on moveItem in commented since I went back and forth between using useCallback and not.
-  // const moveItem = (dragIndex: number, dropIndex: number, list: string) => {
+  // const moveItem = (dragIndex: number, dropIndex: number, list: ListType) => {
   //   let currentList = [];
   //   let currentListSetter;
   //   if (list === "toDo") {
@@ -69,14 +70,14 @@ function App() {
   //   currentListSetter(newItems);
   // };
 
-  const addNewItem = (itemContent) => {
+  const addNewItem = (itemContent: string) => {
     setToDoItems(toDoItems => [...toDoItems, { id: itemId, content: itemContent, done: false, list: "toDo" }]);
     setItemId(prevId => prevId + 1);
   };
 
-  const addToToDoList = (index, list) => {
-    let oldList = [];
-    let oldListSetter;
+  const addToToDoList = (index: number, list: ListType) => {
+    let oldList: ListItemType[] = [];
+    let oldListSetter: React.Dispatch<React.SetStateAction<ListItemType[]>>;
     if (list === "toDo") {
       return;
     } else if (list === "doing") {
@@ -86,9 +87,7 @@ function App() {
       oldList = [...doneItems];
       oldListSetter = setDoneItems;
     };
-    const newItem = oldList[index];
-    newItem.list = "toDo";
-    newItem.done = false;
+    const newItem: ListItemType = { ...oldList[index], list: "toDo", done: false };
     const oldItems = [...oldList];
     const newItems = [...toDoItems];
     oldItems.splice(index, 1);
@@ -97,9 +96,9 @@ function App() {
     setToDoItems(newItems);
   };
 
-  const addToDoingList = (index, list) => {
-    let oldList = [];
-    let oldListSetter;
+  const addToDoingList = (index: number, list: ListType) => {
+    let oldList: ListItemType[] = [];
+    let oldListSetter: React.Dispatch<React.SetStateAction<ListItemType[]>>;
     if (list === "doing") {
       return;
     } else if (list === "toDo") {
@@ -109,9 +108,7 @@ function App() {
       oldList = [...doneItems];
       oldListSetter = setDoneItems;
     };
-    const newItem = oldList[index];
-    newItem.list = "doing";
-    newItem.done = false;
+    const newItem: ListItemType = { ...oldList[index], list: "doing", done: false };
     const oldItems = [...oldList];
     const newItems = [...doingItems];
     oldItems.splice(index, 1);
@@ -120,9 +117,9 @@ function App() {
     setDoingItems(newItems);
   };
 
-  const addToDoneList = (index, list) => {
-    let oldList = [];
-    let oldListSetter;
+  const addToDoneList = (index: number, list: ListType) => {
+    let oldList: ListItemType[] = [];
+    let oldListSetter: React.Dispatch<React.SetStateAction<ListItemType[]>>;
     if (list === "done") {
       return;
     } else if (list === "toDo") {
@@ -132,9 +129,7 @@ function App() {
       oldList = [...doingItems];
       oldListSetter = setDoneItems;
     };
-    const newItem = oldList[index];
-    newItem.list = "done";
-    newItem.done = true;
+    const newItem: ListItemType = { ...oldList[index], list: "done", done: true };
     const oldItems = [...oldList];
     const newItems = [...doneItems];
     oldItems.splice(index, 1);

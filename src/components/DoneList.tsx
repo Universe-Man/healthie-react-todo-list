@@ -1,20 +1,20 @@
 import { useState } from "react";
 import { useDrop } from "react-dnd";
-import type { ListItemType } from "../types";
+import type { ListType, ListItemType } from "../types";
 import ListItem from "./ListItem";
 import "../styles/DoneList.css";
 
 interface DoneListProps {
   doneItems: ListItemType[];
   setDoneItems: React.Dispatch<React.SetStateAction<ListItemType[]>>;
-  moveItem: (currentIndex: number, newIndex: number, list: string) => void;
-  addToDoneList: (index: number, list: string) => void;
+  moveItem: (currentIndex: number, newIndex: number, list: ListType) => void;
+  addToDoneList: (index: number, list: ListType) => void;
 };
 
 const DoneList: React.FC<DoneListProps> = ({ doneItems, setDoneItems, moveItem, addToDoneList }) => {
   const [, drop] = useDrop(() => ({
     accept: "item",
-    drop: (item: { id: number, index: number, list: string }) => {
+    drop: (item: { id: number, index: number, list: ListType }) => {
       addToDoneList(item.index, item.list);
     },
   }));
