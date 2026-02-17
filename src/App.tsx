@@ -75,70 +75,67 @@ function App() {
     setItemId(prevId => prevId + 1);
   };
 
-  const addToToDoList = (index: number, list: ListType) => {
-    let oldList: ListItemType[] = [];
-    let oldListSetter: React.Dispatch<React.SetStateAction<ListItemType[]>>;
-    if (list === "toDo") {
-      return;
-    } else if (list === "doing") {
-      oldList = [...doingItems];
-      oldListSetter = setDoingItems;
-    } else if (list === "done") {
-      oldList = [...doneItems];
-      oldListSetter = setDoneItems;
-    };
-    const newItem: ListItemType = { ...oldList[index], list: "toDo", done: false };
-    const oldItems = [...oldList];
-    const newItems = [...toDoItems];
-    oldItems.splice(index, 1);
-    newItems.push(newItem);
-    oldListSetter(oldItems);
-    setToDoItems(newItems);
-  };
-
-  const addToDoingList = (index: number, list: ListType) => {
-    let oldList: ListItemType[] = [];
-    let oldListSetter: React.Dispatch<React.SetStateAction<ListItemType[]>>;
+  const addToToDoList = useCallback((index: number, list: ListType) => {
+    if (list === "toDo") return;
+    const item = list === "doing" ? doingItems[index] : doneItems[index];
+    const newItem: ListItemType = { ...item, list: "toDo", done: false };
     if (list === "doing") {
-      return;
-    } else if (list === "toDo") {
-      oldList = [...toDoItems];
-      oldListSetter = setToDoItems;
+      setDoingItems(prevItems => {
+        const newDoingList = [...prevItems];
+        newDoingList.splice(index, 1);
+        return newDoingList;
+      });
     } else if (list === "done") {
-      oldList = [...doneItems];
-      oldListSetter = setDoneItems;
+      setDoneItems(prevItems => {
+        const newDoneList = [...prevItems];
+        newDoneList.splice(index, 1);
+        return newDoneList;
+      });
     };
-    const newItem: ListItemType = { ...oldList[index], list: "doing", done: false };
-    const oldItems = [...oldList];
-    const newItems = [...doingItems];
-    oldItems.splice(index, 1);
-    newItems.push(newItem);
-    oldListSetter(oldItems);
-    setDoingItems(newItems);
-  };
+    setToDoItems(prevItems => [...prevItems, newItem]);
+  }, [toDoItems, doingItems, doneItems]);
 
-  const addToDoneList = (index: number, list: ListType) => {
-    let oldList: ListItemType[] = [];
-    let oldListSetter: React.Dispatch<React.SetStateAction<ListItemType[]>>;
-    if (list === "done") {
-      return;
-    } else if (list === "toDo") {
-      oldList = [...toDoItems];
-      oldListSetter = setToDoItems;
-    } else if (list === "doing") {
-      oldList = [...doingItems];
-      oldListSetter = setDoneItems;
+  const addToDoingList = useCallback((index: number, list: ListType) => {
+    if (list === "doing") return;
+    const item = list === "toDo" ? toDoItems[index] : doneItems[index];
+    const newItem: ListItemType = { ...item, list: "doing", done: false };
+    if (list === "toDo") {
+      setToDoItems(prevItems => {
+        const newToDoList = [...prevItems];
+        newToDoList.splice(index, 1);
+        return newToDoList;
+      });
+    } else if (list === "done") {
+      setDoneItems(prevItems => {
+        const newDoneList = [...prevItems];
+        newDoneList.splice(index, 1);
+        return newDoneList;
+      });
     };
-    const newItem: ListItemType = { ...oldList[index], list: "done", done: true };
-    const oldItems = [...oldList];
-    const newItems = [...doneItems];
-    oldItems.splice(index, 1);
-    newItems.push(newItem);
-    oldListSetter(oldItems);
-    setDoneItems(newItems);
+    setDoingItems(prevItems => [...prevItems, newItem]);
+  }, [toDoItems, doingItems, doneItems]);
+
+  const addToDoneList = useCallback((index: number, list: ListType) => {
+    if (list === "done") return;
+    const item = list === "toDo" ? toDoItems[index] : doingItems[index];
+    const newItem: ListItemType = { ...item, list: "done", done: true };
+    if (list === "toDo") {
+      setToDoItems(prevItems => {
+        const newToDoList = [...prevItems];
+        newToDoList.splice(index, 1);
+        return newToDoList;
+      });
+    } else if (list === "doing") {
+      setDoingItems(prevItems => {
+        const newDoingList = [...prevItems];
+        newDoingList.splice(index, 1);
+        return newDoingList;
+      });
+    };
+    setDoneItems(prevItems => [...prevItems, newItem]);
     setConfettiPieces(300);
     setTimeout(() => setConfettiPieces(0), 6000);
-  };
+  }, [toDoItems, doingItems, doneItems]);
 
   return (
     <div className="container">
