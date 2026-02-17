@@ -17,7 +17,7 @@ const DoneList: React.FC<DoneListProps> = ({ doneItems, setDoneItems, moveItem, 
     drop: (item: { id: number, index: number, list: ListType }) => {
       addToDoneList(item.index, item.list);
     },
-  }));
+  }), [addToDoneList]);
 
   return (
     <div className="done-list-container" ref={(element) => { drop(element) }}>

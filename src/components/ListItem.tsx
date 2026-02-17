@@ -14,7 +14,7 @@ const ListItem: React.FC<ListItemProps> = ({ listItem, index, moveItem, dropTarg
   const [, drag] = useDrag(() => ({
     type: "item",
     item: { id: listItem.id, index, list: listItem.list },
-  }));
+  }), [listItem, index]);
 
   const [, drop] = useDrop(() => ({
     accept: "item",
@@ -30,7 +30,7 @@ const ListItem: React.FC<ListItemProps> = ({ listItem, index, moveItem, dropTarg
       // NOTE: commented out moveItem below before adding new items to the toDoList via addNewItem allows them to persist when uncommented it after, but if moveItem isn't commented out when running addNewItem, the new item doesn't stay in state after moveItem runs. This was particulary confusing because this useDrop function and the moveItem function do not run when addNewItem runs.
       moveItem(dragIndex, dropIndex, item.list);
     },
-  }));
+  }), [moveItem, index, dropTargetList]);
 
   return (
     <div className={`list-item list-item-${listItem.id} ${odd}`} ref={(element) => { drag(drop(element)) }}>

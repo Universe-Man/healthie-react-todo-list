@@ -18,7 +18,7 @@ const ToDoList: React.FC<ToDoListProps> = ({ toDoItems, setToDoItems, moveItem, 
     drop: (item: { id: number, index: number, list: ListType }) => {
       addToToDoList(item.index, item.list);
     },
-  }));
+  }), [addToToDoList]);
 
   return (
     <div className="todo-list-container" ref={(element) => { drop(element) }}>
